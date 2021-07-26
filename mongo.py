@@ -18,7 +18,7 @@ polls = db['polls']
 
 
 @instance.register
-class RMTian(Document):
+class ChronicGamer(Document):
     """
     Model for each user
     """
@@ -42,16 +42,16 @@ class RMTian(Document):
 
 
 async def register(name, id):
-    if await RMTian.is_registered(id=id):
+    if await ChronicGamer.is_registered(id=id):
         return False
     else:
-        rmtian = RMTian(name=name, discord_id=id)
-        rmtian.commit()
+        cg = ChronicGamer(name=name, discord_id=id)
+        ChronicGamer.commit()
         return True
 
 
 async def remove_user(id):
-    if await RMTian.is_registered(id=id):
+    if await ChronicGamer.is_registered(id=id):
         collection.delete_one({"discord_id": id})
         return True
     else:
@@ -91,8 +91,3 @@ class PollModel(Document):
             return ended_list
         else:
             return None
-
-
-for user in collection.find():
-    collection.find_and_modify(query={"_id": user['_id']}, update={
-        "$set": {"send_dm": True}})

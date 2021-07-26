@@ -1,21 +1,20 @@
 import asyncio
 from discord.ext import commands, tasks
-from django import test
 from mongo import *
 import pytz
-from datetime import datetime, timedelta
+from datetime import datetime
 from .messages.dms import *
 
 
-class RMTCommands(commands.Cog):
-    def __init__(self, bot):
+class CGCommands(commands.Cog):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         # self.send_dm.start()
 
     @commands.command()
-    async def register(self, ctx):
+    async def register(self, ctx: commands.Context):
         author = ctx.author
-        if await RMTian.is_registered(id=author.id):
+        if await ChronicGamer.is_registered(id=author.id):
             return await ctx.send(f"{ctx.author.mention}, You are already registered")
         await ctx.send("Please enter your name")
 
@@ -25,15 +24,15 @@ class RMTCommands(commands.Cog):
             return await ctx.send(f"{ctx.author.mention},The request to register has timed out. Kindly restart the process")
         else:
             if await register(name=str(name.content), id=ctx.author.id):
-                await ctx.send(f"{ctx.author.mention}, you have been registered as an RMTian")
+                await ctx.send(f"{ctx.author.mention}, you have been registered as an ChronicGamer")
             else:
                 await ctx.send(f"{ctx.author.mention}, you are already registered")
 
     @commands.command()
-    async def remove(self, ctx):
+    async def remove(self, ctx: commands.Context):
 
         id = ctx.author.id
-        if not await RMTian.is_registered(id=id):
+        if not await ChronicGamer.is_registered(id=id):
             return ctx.send("You are not registered")
         await ctx.send("Type `yes` if you want to confirm your removal..")
         try:
@@ -50,8 +49,8 @@ class RMTCommands(commands.Cog):
             await ctx.send("You are not registered")
 
     @commands.command()
-    async def nodms(self, ctx):
-        if RMTian.is_registered(id=ctx.author.id):
+    async def nodms(self, ctx: commands.Context):
+        if ChronicGamer.is_registered(id=ctx.author.id):
             await ctx.send("Ok wait")
         else:
             await ctx.send(f"Oof {ctx.author.mention}!, you need to be registered to run this command.")
@@ -118,4 +117,7 @@ class RMTCommands(commands.Cog):
     async def before_send_dm(self):
         print("Waiting for bot to get ready")
         await self.bot.wait_until_ready()
-        print("Bot is ready")
+
+
+def setup(bot):
+    bot.add_cog(CGCommands(bot))

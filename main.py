@@ -1,21 +1,22 @@
 import logging
 import discord
 from discord.ext import commands
-from cogs.bot import Bot
-from cogs.commands import RMTCommands
-from cogs.poll import Poll
+import cogs
 import sys
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Setup bot
 token = os.getenv("BOT_TOKEN")
-client = commands.Bot(command_prefix="b!",
+client = commands.Bot(command_prefix="cg!",
                       activity=discord.Game("Developed by Ash"), intents=discord.Intents.all(), help_command=None)
-client.add_cog(Bot(client))
-client.add_cog(RMTCommands(client))
-client.add_cog(Poll(client))
+
+for i in cogs.cogs:
+    client.load_extension(f"cogs.{i}")
+
+
 if sys.platform == "linux":
     from keep_alive import keep_alive
     keep_alive()

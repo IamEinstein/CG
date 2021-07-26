@@ -18,13 +18,13 @@ class Poll(commands.Cog):
     Everything related to polls goes here
     """
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.check_ended.start()
 
     @commands.command(pass_context=True)
     @has_permissions(administrator=True, manage_guild=True)
-    async def poll(self, ctx):
+    async def poll(self, ctx: commands.Context):
         """
         The poll command.
         This is used to create polls in an interactive manner
@@ -114,7 +114,7 @@ class Poll(commands.Cog):
             return True
 
     @commands.command()
-    async def testpoll(self, ctx):
+    async def testpoll(self, ctx: commands.Context):
         """
         A (temporary) testing command,
         used to test polls
@@ -187,3 +187,7 @@ class Poll(commands.Cog):
                 await self.create_poll(title=title, content=content, channel=gw_channel_obj, reactions=reaction_list, time=int(time), time_created=datetime.now(tz=IST))
 
     # async def help(self, ct)
+
+
+def setup(bot):
+    bot.add_cog(Poll(bot))
