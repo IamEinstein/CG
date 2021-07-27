@@ -9,7 +9,7 @@ load_dotenv()
 
 # !umongo
 #  Basic setup
-db = pymongo.MongoClient(os.getenv("DATABASE_URI"))['boom']
+db = pymongo.MongoClient(os.getenv("DATABASE_URI"))['chronic']
 
 instance = PyMongoInstance(db)
 collection = db['data']
@@ -25,6 +25,8 @@ class ChronicGamer(Document):
     name = fields.StringField(required=True)
     discord_id = fields.IntegerField(unique=True)
     send_dm = fields.BooleanField(default=True)
+    game = fields.ListField(fields.StringField(), default=[])
+    tied = fields.IntegerField(required=True)
 
     class Meta:
         collection_name = "data"

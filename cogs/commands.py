@@ -1,15 +1,15 @@
+import itertools
 import asyncio
 from discord.ext import commands, tasks
 from mongo import *
-import pytz
-from datetime import datetime
+from .messages.embeds import create_team_emded
 from .messages.dms import *
+from .messages.poll import timeout_message
 
 
 class CGCommands(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        # self.send_dm.start()
 
     @commands.command()
     async def register(self, ctx: commands.Context):
@@ -55,68 +55,53 @@ class CGCommands(commands.Cog):
         else:
             await ctx.send(f"Oof {ctx.author.mention}!, you need to be registered to run this command.")
 
-    @tasks.loop(minutes=45)
-    async def send_dm(self, *args, **kwargs):
+    @commands.command(alias="mt")
+    async def maketeams(self, ctx: commands.Context):
+        if ctx.author.id != 764415588873273345:
+            return await ctx.send("You are not authorised to use this command yet")
+        await ctx.send("Which game?")
+        try:
 
-        IST = pytz.timezone('Asia/Kolkata')
+            game = await self.bot.wait_for("message", check=lambda message: message.author.id == ctx.author.id, timeout=30)
+        except asyncio.TimeoutError:
+            return await ctx.send(timeout_message)
+        if game != None:
+            await ctx.send("How much time do you want to wait for making the teams (enter in seconds)")
+            time = await self.bot.wait_for(
+                "message", timeout=30, check=lambda message: message.author.id == ctx.author.id)
+            try:
+                time = int(time.content)
+            except (TypeError, ValueError):
+                await ctx.send("Not valid time")
+            else:
+                users = []
+                msg = await ctx.send(embed=create_team_emded(game=game, time=time))
+                await msg.add_reaction("👍")
+                await asyncio.sleep(int(time))
+                reacted_msg = await ctx.channel.fetch_message(msg.id)
 
-        now = datetime.now(tz=IST)
-        time_before = now.replace(hour=13, minute=0, second=0, microsecond=0)
-        time_after = now.replace(hour=15, minute=0, second=0, microsecond=0)
-        if now > time_before and now < time_after:
-            from mongo import collection
-            for user in collection.find({"send_dm": True}):
-                test_ids = [
-                    765838723169386516, 764415588873273345, 795513154514714634]
-                if user['discord_id'] in test_ids:
-                    discord_user = self.bot.get_user(id=user['discord_id'])
-                    print(f"Sending Dm to {discord_user}")
-                    msg = await discord_user.send(ask(discord_user))
-                    await msg.add_reaction("🇾")
-                    await msg.add_reaction("🇳")
+                for reaction in reacted_msg.reactions:
+                    user_list = await reaction.users().flatten()
 
-                    def check(reaction, user):
-                        return reaction.emoji == "🇾" or reaction.emoji == "🇳" and user == discord_user
-                    try:
-                        reaction, r_user = await self.bot.wait_for("reaction_add", timeout=3600, check=check)
-                    except asyncio.TimeoutError:
-                        await discord_user.send("We didn't get any response from you")
-                        file = open('coming.txt', mode="a+")
-                        file.write(
-                            f"No response from {discord_user.mention}\n")
-                        file.close()
-                    else:
-                        await discord_user.send("Thank you for your response")
-                        if reaction.emoji == "🇾":
-                            file = open('coming.txt', mode="a+")
-                            file.write(f"{r_user.mention} is coming down\n")
-                            file.close()
-                        elif reaction.emoji == "🇳":
-                            file = open('coming.txt', mode="a+")
-                            file.write(
-                                f"{r_user.mention} is not coming down\n")
-                            file.close()
+                    for user in user_list:
+                        print(user)
+                        if user.id != 850589370569195541:
+                            users.append(user)
+                print(users)
+                if users != None and users != []:
+                    teams = list(itertools.permutations(users, 3))
+                    if teams == None:
+                        new_teams = list(itertools.permutations(users, 2))
+                        if new_teams == None:
+                            new_new_teams = teams = list(
+                                itertools.permutations(users, 1))
+                            ctx.send(new_new_teams)
                         else:
-                            file = open('coming.txt', mode="a+")
-                            file.write(
-                                f"Didn't get a valid response from {r_user.mention}\n")
-                            file.close()
-            file = open("./coming.txt", mode="r")
-            msg = ""
-            for line in file.readlines():
-                msg += line
-            channel = self.bot.get_channel(866231728044507136)
-            await channel.send(msg)
-            file.close()
-            # Delete all contents after sending DMs
-            file = open('./coming.txt', mode='w')
-            file.close()
-            return True
-
-    @send_dm.before_loop
-    async def before_send_dm(self):
-        print("Waiting for bot to get ready")
-        await self.bot.wait_until_ready()
+                            ctx.send(new_teams)
+                    else:
+                        await ctx.send(teams)
+                else:
+                    await ctx.send("NO one reacted :|")
 
 
 def setup(bot):
