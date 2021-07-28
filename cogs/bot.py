@@ -21,7 +21,7 @@ class Bot(commands.Cog):
     async def on_ready(self):
         "Tells when the bot is ready"
         print("Bot is ready")
-        channel = self.bot.get_channel(840509242300694559)
+        channel = self.bot.get_channel(869494380770230282)
         other_channel = self.bot.get_channel(869132416130891796)
         await channel.send(embed=ready_embed(sys.platform))
         await other_channel.send(embed=ready_embed(sys.platform))
