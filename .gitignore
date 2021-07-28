@@ -134,3 +134,5 @@ get.py
 test.py
 test_bot.py
 discord.log
+poetry.lock
+pyproject.toml
