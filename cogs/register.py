@@ -13,7 +13,7 @@ class Register(commands.Cog):
 
     @commands.command()
     async def clan_register(self, ctx: commands.Context):
-        if ctx.author.id != 850589370569195541:
+        if ctx.author.id != 764415588873273345:
             return await ctx.send("You are not authorised to use this command")
         msg_format = r"""
 Game: .{32}
