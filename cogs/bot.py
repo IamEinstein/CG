@@ -1,9 +1,10 @@
 import discord
+import os
 import datetime
 from discord import Color
 from discord.ext import commands
 import sys
-from .embeds import bot
+from .messages.embeds import ready_embed, edit_msg, del_msg
 from datetime import datetime
 from utils.tz import IST
 
@@ -22,8 +23,8 @@ class Bot(commands.Cog):
         print("Bot is ready")
         channel = self.bot.get_channel(840509242300694559)
         other_channel = self.bot.get_channel(869132416130891796)
-        await channel.send(embed=bot.ready_embed(sys.platform))
-        await other_channel.send(embed=bot.ready_embed(sys.platform))
+        await channel.send(embed=ready_embed(sys.platform))
+        await other_channel.send(embed=ready_embed(sys.platform))
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
@@ -32,7 +33,7 @@ class Bot(commands.Cog):
         if int(before.channel.id) == 856767714520465459 or before.author.bot == True or before.content == after.content:
             pass
         else:
-            await channel.send(embed=bot.edit_msg(before, after))
+            await channel.send(embed=edit_msg(before, after))
 
     @commands.Cog.listener()
     async def on_message_delete(self, message):
@@ -40,7 +41,7 @@ class Bot(commands.Cog):
         if int(message.channel.id) == 856767714520465459:
             pass
         else:
-            await channel.send(embed=bot.del_msg(message))
+            await channel.send(embed=del_msg(message))
 
     @commands.command()
     async def help(self, ctx: commands.Context, *args, **kwargs):
@@ -60,6 +61,13 @@ class Bot(commands.Cog):
         if isinstance(error, commands.NotOwner):
             return await ctx.send(f"{ctx.author.mention}, you are not the owner of this bot")
         return await ctx.send(str(error))
+
+    @commands.command()
+    async def invite(self, ctx):
+        if ctx.author.id == 764415588873273345:
+            return await ctx.author.send(os.getenv("BOT_LINK"))
+        else:
+            return await ctx.send("You are not authorised to use this command")
 
 
 def setup(bot):

@@ -1,5 +1,6 @@
 cogs = (
     "bot",
     "commands",
-    "poll"
+    "poll",
+    'register'
 )

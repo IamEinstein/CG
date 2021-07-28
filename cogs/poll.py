@@ -4,11 +4,10 @@ from discord.ext.commands import has_permissions
 import re
 import discord
 from .messages.poll import *
+from .messages.embeds import *
 from datetime import datetime, timedelta
 from utils.tz import IST, format_time
 from mongo import PollModel, polls
-import logging
-import traceback
 # TODO:  Make tie mechanism for polls
 
 
@@ -108,19 +107,23 @@ class Poll(commands.Cog):
         try:
             poll.commit()
         except Exception as e:
-            logging.error(traceback.format_exc())
+            channel = self.bot.get_channel(869852920672313404)
+            await channel.send(e)
             return False
         else:
             return True
 
     @commands.command()
-    async def testpoll(self, ctx: commands.Context):
+    async def testpoll(self, ctx: commands.Context, time=None):
         """
         A (temporary) testing command,
         used to test polls
         """
         if ctx.author.id == 764415588873273345:
-            await self.create_poll(title="Test", content="oof", channel=ctx.channel, reactions=['🤣', '😔', '😈'], time=0.5, time_created=datetime.now(tz=IST))
+            if time == None:
+                await self.create_poll(title="Test", content="oof", channel=ctx.channel, reactions=['🤣', '😔', '😈'], time=0.5, time_created=datetime.now(tz=IST))
+            elif time != None:
+                await self.create_poll(title="Test", content="oof", channel=ctx.channel, reactions=['🤣', '😔', '😈'], time=int(time), time_created=datetime.now(tz=IST))
 
     async def end_poll(self, poll: PollModel):
         """
@@ -144,9 +147,11 @@ class Poll(commands.Cog):
             poll['ended'] = True
             poll['winner'] = reaction_emoji
             poll['winner_reaction_count'] = reaction_count
-            print(poll)
             polls.find_and_modify(query={
                                   "poll_id": poll['poll_id'], "channel_id": poll['channel_id']}, update={"$set": poll})
+            channel = self.bot.get_channel(869850890201358357)
+            embed = await log_poll(poll, self.bot)
+            await channel.send(embed=embed)
 
     @tasks.loop(seconds=45)
     async def check_ended(self):
@@ -185,8 +190,6 @@ class Poll(commands.Cog):
             else:
                 reaction_list = reactions.content.split()
                 await self.create_poll(title=title, content=content, channel=gw_channel_obj, reactions=reaction_list, time=int(time), time_created=datetime.now(tz=IST))
-
-    # async def help(self, ct)
 
 
 def setup(bot):

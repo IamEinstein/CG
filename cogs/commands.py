@@ -1,6 +1,6 @@
 import itertools
 import asyncio
-from discord.ext import commands, tasks
+from discord.ext import commands
 from mongo import *
 from .messages.embeds import create_team_emded
 from .messages.dms import *
