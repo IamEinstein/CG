@@ -64,7 +64,7 @@ def del_msg(message):
     Embed for deleted message reporting
     """
     embed = discord.Embed(
-        color=Color.blue(), url="https://github.com/IamEinstein/Boom", title=f"{message.author} deleted a message", timestamp=datetime.datetime.now())
+        color=Color.blue(), url="https://github.com/IamEinstein/CG", title=f"{message.author} deleted a message", timestamp=datetime.datetime.now())
     embed.set_thumbnail(url=message.author.avatar_url)
 
     embed.add_field(name="Message Content",
@@ -90,8 +90,10 @@ async def log_poll(poll: PollModel, bot: commands.Bot):
         title=f"Poll ended in {guild_name}", url=url, thumbnail=icon_url)
     embed.add_field(name="Poll topic", value=poll['title'])
     embed.add_field(
-        name=f"Started at {str(time_started)}", value=str(time_started))
-    embed.add_field(name=f"Ended at {str(time_ended)}", value=str(time_ended))
+        name=f"Started", value=str(time_started))
+    embed.add_field(name=f"Ended", value=str(time_ended))
+    embed.add_field(name="Ended at",
+                    value=f"{str(datetime.datetime.now(tz=IST))}")
     embed.add_field(
         name=f"Winner", value=f"Winner {poll['winner']}, Votes: {reaction_count}")
     return embed
