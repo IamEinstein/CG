@@ -28,6 +28,7 @@ if sys.platform == "linux":
     from keep_alive import keep_alive
     keep_alive()
     print('Waiting for bot to get ready')
+    client.load_extension("cog")
     client.run(token)
 else:
     logger = logging.getLogger('discord')
