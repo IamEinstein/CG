@@ -13,6 +13,11 @@ class Register(commands.Cog):
 
     @commands.command(description="Registers users in the clan.The format is `cg!register <NameofGame> <Username> <Tier>` .The message should also have an attachment as the proof of their ranking.")
     async def register(self, ctx: commands.Context, game: str, username: str, tier: int):
+        """
+        Registers you as a clan member
+        Format should be:
+        `cg!register <NameoftheGame> <Username> <Tier>`
+        """
         attachments = ctx.message.attachments
         if len(attachments) > 0:
             await ctx.message.reply("Ok, details recieved")
