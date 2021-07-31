@@ -43,17 +43,6 @@ class Bot(commands.Cog):
         else:
             await channel.send(embed=del_msg(message))
 
-    @commands.command()
-    async def help(self, ctx: commands.Context, *args, **kwargs):
-        """
-        Help command for the bot
-        """
-        embed = discord.Embed(color=Color.blue(), url="https://github.com/IamEinstein/CG",
-                              title=f"Chronic Gamers Bot help,\n here are the list of commands", timestamp=datetime.now(tz=IST))
-        embed.add_field(name="cg!register",
-                        value="Type cg!register if you want to get registered as an ChronicGamer ", inline=True)
-        await ctx.send(embed=embed)
-
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
