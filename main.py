@@ -1,8 +1,9 @@
-from discord_slash import SlashCommand
+
 import logging
 import discord
 from discord.ext import commands
 import cogs
+from cogs.help import CustomHelpCommand
 import sys
 
 import os
@@ -12,23 +13,17 @@ load_dotenv()
 
 # Setup bot
 token = os.getenv("BOT_TOKEN")
-client = commands.Bot(command_prefix="cg!",
-                      activity=discord.Game("Developed by Ash"), intents=discord.Intents.all(), help_command=None)
+client = commands.Bot(command_prefix="cg!", activity=discord.Game(
+    "Developed by Ash"), intents=discord.Intents.all(), help_command=CustomHelpCommand())
 
 for i in cogs.cogs:
     client.load_extension(f"cogs.{i}")
-slash = SlashCommand(client)
 
-
-@slash.slash(name="Test", description="test")
-async def test(name: str):
-    print(name)
 
 if sys.platform == "linux":
     from keep_alive import keep_alive
     keep_alive()
     print('Waiting for bot to get ready')
-    client.load_extension("cog")
     client.run(token)
 else:
     logger = logging.getLogger('discord')
@@ -39,5 +34,4 @@ else:
         '%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
     logger.addHandler(handler)
     print('Waiting for bot to get ready')
-    client.load_extension("cog")
     client.run(token)

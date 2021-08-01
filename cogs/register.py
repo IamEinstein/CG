@@ -1,7 +1,5 @@
-import asyncio
-
+import discord
 from discord.ext import commands
-from discord_slash import cog_ext, SlashContext
 
 
 class Register(commands.Cog):
@@ -13,11 +11,22 @@ class Register(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @cog_ext.cog_slash(name="clan_register", description="Register for the clan", guild_ids=[850593645009698836])
-    async def _clan_register(self, ctx: SlashContext, game: str, username: str, tier: int):
-        if ctx.author.id != 764415588873273345:
-            return await ctx.send("You are not authorised to use this command")
-        await ctx.send("Ok, details recieved")
+    @commands.command(description="Registers users in the clan.The format is `cg!register <NameofGame> <Username> <Tier>` .The message should also have an attachment as the proof of their ranking.")
+    async def register(self, ctx: commands.Context, game: str, username: str, tier: int):
+        """
+        Registers you as a clan member
+        Format should be:
+        `cg!register <NameoftheGame> <Username> <Tier>`
+        """
+        attachments = ctx.message.attachments
+        if len(attachments) > 0:
+            await ctx.message.reply("Ok, details recieved")
+        else:
+            return await ctx.send("No attachments recieved")
+        admin = self.bot.get_user(594093066839654418)
+        embed = discord.Embed(author=ctx.author.name+ctx.author.discriminator, footer=f"Registration by {ctx.author.mention}",
+                              title="New registration for CG Clan", url=ctx.message.jump_url, description=f"Hi {admin.mention}, we got a new registration for the CG Clan.")
+        await admin.send(embed=embed)
 
 
 def setup(bot: commands.Bot):
