@@ -7,9 +7,9 @@ class CustomHelpCommand(commands.HelpCommand):
         super().__init__(command_attrs={
             "help": "Show help about the bot, a command, or a category."})
 
-    # async def on_help_command_error(self, ctx, error):
-    #     if isinstance(error, commands.CommandInvokeError):
-    #         await ctx.send(str(error.original))
+    async def on_help_command_error(self, ctx, error):
+        if isinstance(error, commands.CommandInvokeError):
+            await ctx.send(str(error.original))
 
     def make_page_embed(self, commands, title="Chronic Help", description=discord.Embed.Empty):
         embed = discord.Embed(
