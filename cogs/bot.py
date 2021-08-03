@@ -1,12 +1,8 @@
-import discord
+
 import os
-import datetime
-from discord import Color
 from discord.ext import commands
 import sys
 from .messages.embeds import ready_embed, edit_msg, del_msg
-from datetime import datetime
-from utils.tz import IST
 
 
 class Bot(commands.Cog):
@@ -29,6 +25,8 @@ class Bot(commands.Cog):
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
         "Identifies and reports edited messages"
+        if before.guild.id == 850593645009698836:
+            return
         channel = self.bot.get_channel(856767714520465459)
         if int(before.channel.id) == 856767714520465459 or before.author.bot == True or before.content == after.content:
             pass
@@ -37,6 +35,8 @@ class Bot(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_delete(self, message):
+        if message.guild.id == 850593645009698836:
+            return
         channel = self.bot.get_channel(856767714520465459)
         if int(message.channel.id) == 856767714520465459:
             pass

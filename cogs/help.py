@@ -1,5 +1,8 @@
+from datetime import datetime
 import discord
 from discord.ext import commands
+from utils.colours import give_random_color
+from utils.tz import IST
 
 
 class CustomHelpCommand(commands.HelpCommand):
@@ -33,8 +36,11 @@ class CustomHelpCommand(commands.HelpCommand):
         return embed
 
     async def send_bot_help(self, mapping):
-        embed = discord.Embed(
-            title="Chronic Help", description="Below is the list of commands. Pls type cg!help <command> to get more information.")
+        embed = discord.Embed(color=give_random_color(),
+                              title="Chronic Help", description="Below is the list of commands. Pls type cg!help <command> to get more information.", timestamp=datetime.now(tz=IST))
+        embed.set_author(name=self.context.bot.user.name,
+                         icon_url=self.context.bot.user.avatar, url="https://github.com/IamEinstein/CG")
+        embed.set_footer(text=":)", icon_url=discord.Embed.Empty)
         commands = mapping.values()
         # Arrange according to category
         # 1. Get all keys as list

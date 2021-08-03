@@ -4,10 +4,11 @@ import discord
 from discord import Embed, Color
 from utils.tz import datetime_from_utc_to_local, format_time, IST
 from discord.ext import commands
+from utils.colours import give_random_color
 
 
 def create_team_emded(time: int, game: str):
-    embed = Embed(colour=Color.dark_gold(
+    embed = Embed(colour=give_random_color(
     ), description=f"Time to play {game.content},react with  👍 if u in", title="Matchmaking")
     embed.set_footer(text=f"Ends in {str(time)} seconds")
 
@@ -20,7 +21,7 @@ def ready_embed(platform):
     """
 
     embed = discord.Embed(title="Bot has started/restarted",
-                          description="Bot has started running, here are the details", color=discord.Color.blurple())
+                          description="Bot has started running, here are the details", color=give_random_color())
     local_timezone = datetime.datetime.now(
         datetime.timezone.utc).astimezone().tzinfo
     time = datetime.datetime.now()
@@ -48,14 +49,14 @@ def edit_msg(before, after):
     Embed for edited message reporting
     """
     embed = discord.Embed(
-        color=Color.blue(), url="https://github.com/IamEinstein/Boom", title=f"{before.author} edited a message", timestamp=datetime.datetime.now())
+        color=give_random_color(), url=before.jump_url, title=f"{before.author} edited a message", timestamp=datetime.datetime.now())
     embed.set_thumbnail(url=before.author.avatar_url)
     embed.add_field(name="Original Message",
                     value=f'{before.content}', inline=False)
     embed.add_field(name="Edited Message",
                     value=f'{after.content}', inline=True)
     embed.add_field(
-        name="Channel", value=f"{before.channel.mention}", inline=True)
+        name="Channel", value=f"{before.schannel.mention}", inline=True)
     return embed
 
 
@@ -64,7 +65,7 @@ def del_msg(message):
     Embed for deleted message reporting
     """
     embed = discord.Embed(
-        color=Color.blue(), url="https://github.com/IamEinstein/CG", title=f"{message.author} deleted a message", timestamp=datetime.datetime.now())
+        color=give_random_color(), url=message.jump_url, title=f"{message.author} deleted a message", timestamp=datetime.datetime.now())
     embed.set_thumbnail(url=message.author.avatar_url)
 
     embed.add_field(name="Message Content",
@@ -87,7 +88,7 @@ async def log_poll(poll: PollModel, bot: commands.Bot):
     guild_name = guild.name
     url = message.jump_url
     embed = discord.Embed(
-        title=f"Poll ended in {guild_name}", url=url, thumbnail=icon_url)
+        title=f"Poll ended in {guild_name}", url=url, thumbnail=icon_url, color=give_random_color())
     embed.add_field(name="Poll topic", value=poll['title'])
     embed.add_field(
         name=f"Started", value=str(time_started))
