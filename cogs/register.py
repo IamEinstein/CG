@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from .descriptions import register_description
 
 
 class Register(commands.Cog):
@@ -11,7 +12,7 @@ class Register(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(description="Registers users in the clan.The format is `cg!register <NameofGame> <Username> <Tier>` .The message should also have an attachment as the proof of their ranking.")
+    @commands.command(description=register_description)
     async def register(self, ctx: commands.Context, game: str, username: str, tier: int):
         """
         Registers you as a clan member

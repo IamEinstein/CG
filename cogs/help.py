@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-import itertools
 
 
 class CustomHelpCommand(commands.HelpCommand):
@@ -8,9 +7,9 @@ class CustomHelpCommand(commands.HelpCommand):
         super().__init__(command_attrs={
             "help": "Show help about the bot, a command, or a category."})
 
-    async def on_help_command_error(self, ctx, error):
-        if isinstance(error, commands.CommandInvokeError):
-            await ctx.send(str(error.original))
+    # async def on_help_command_error(self, ctx, error):
+    #     if isinstance(error, commands.CommandInvokeError):
+    #         await ctx.send(str(error.original))
 
     def make_page_embed(self, commands, title="Chronic Help", description=discord.Embed.Empty):
         embed = discord.Embed(
@@ -34,23 +33,24 @@ class CustomHelpCommand(commands.HelpCommand):
         return embed
 
     async def send_bot_help(self, mapping):
-        cogs = []
-        for cog in mapping:
-            print(cog)
-            # await self.get_destination().send(f'{cog.qualified_name}:{[command.name for command in mapping[cog]]}')
-            if isinstance(cog, commands.Bot):
-                pass
-            else:
-                cogs.append(cog)
+        embed = discord.Embed(
+            title="Chronic Help", description="Below is the list of commands. Pls type cg!help <command> to get more information.")
+        commands = mapping.values()
+        # Arrange according to category
+        # 1. Get all keys as list
+        # 2. Iterate through list to get values
+        # 3.Add the values in that category
+        for command_list in commands:
 
-        embed = self.make_default_embed(cogs,
-                                        title=f"CG Bot Command Categories )",
-                                        description=(
-                                            f"Use `cg!help <command>` for more info on a command.\n"
-                                            f"Use `cg!help <category>` for more info on a category."
-                                        ),
-                                        )
-        return await self.bot.send(embed=embed)
+            for command in command_list:
+                if command.description != None and command.description != "" and command.name != "help" and command.name != "invite":
+                    embed.add_field(name=f"{command.name}",
+                                    value=f"{command.description}", inline=False)
+                elif command.name != "help" and command.name != "invite":
+                    embed.add_field(name=f"{command.name}",
+                                    value=f"No description", inline=True)
+
+        await self.context.message.reply(embed=embed)
 
     async def send_cog_help(self, cog):
         ctx = self.context

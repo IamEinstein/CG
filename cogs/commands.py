@@ -5,57 +5,14 @@ from mongo import *
 from .messages.embeds import create_team_emded
 from .messages.dms import *
 from .messages.poll import timeout_message
+from .descriptions import maketeams_description
 
 
 class CGCommands(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    # @commands.command()
-    # async def register(self, ctx: commands.Context):
-    #     author = ctx.author
-    #     if await ChronicGamer.is_registered(id=author.id):
-    #         return await ctx.send(f"{ctx.author.mention}, You are already registered")
-    #     await ctx.send("Please enter your name")
-
-    #     try:
-    #         name = await self.bot.wait_for("message", timeout=30, check=lambda message: message.author == ctx.author)
-    #     except asyncio.TimeoutError:
-    #         return await ctx.send(f"{ctx.author.mention},The request to register has timed out. Kindly restart the process")
-    #     else:
-    #         if await register(name=str(name.content), id=ctx.author.id):
-    #             await ctx.send(f"{ctx.author.mention}, you have been registered as an ChronicGamer")
-    #         else:
-    #             await ctx.send(f"{ctx.author.mention}, you are already registered")
-
-    # @commands.command()
-    # async def remove(self, ctx: commands.Context):
-
-    #     id = ctx.author.id
-    #     if not await ChronicGamer.is_registered(id=id):
-    #         return ctx.send("You are not registered")
-    #     await ctx.send("Type `yes` if you want to confirm your removal..")
-    #     try:
-    #         response = await self.bot.wait_for("message", timeout=30, check=lambda message: message.author == ctx.author)
-    #         if response.content.lower() != "yes" and response.content.lower() != "no":
-    #             return await ctx.send("You didn't enter a valid response, the process has been cancelled")
-    #         elif response.content.lower() == "no":
-    #             return await ctx.send("Okay, the process is cancelled")
-    #     except asyncio.TimeoutError:
-    #         return await ctx.send("No response was recieved, the process has been cancelled")
-    #     if await remove_user(id):
-    #         await ctx.send(f"{ctx.author.mention}, you have been removed")
-    #     else:
-    #         await ctx.send("You are not registered")
-
-    # @commands.command()
-    # async def nodms(self, ctx: commands.Context):
-    #     if ChronicGamer.is_registered(id=ctx.author.id):
-    #         await ctx.send("Ok wait")
-    #     else:
-    #         await ctx.send(f"Oof {ctx.author.mention}!, you need to be registered to run this command.")
-
-    @commands.command(alias="mt")
+    @commands.command(aliases=["mt"], description=maketeams_description)
     async def maketeams(self, ctx: commands.Context):
         if ctx.author.id != 764415588873273345:
             return await ctx.send("You are not authorised to use this command yet")

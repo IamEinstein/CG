@@ -8,6 +8,7 @@ from .messages.embeds import *
 from datetime import datetime, timedelta
 from utils.tz import IST, format_time
 from mongo import PollModel, polls
+from .descriptions import poll_description, testpoll_description, makepoll_description
 # TODO:  Make tie mechanism for polls
 
 
@@ -21,7 +22,7 @@ class Poll(commands.Cog):
         self.bot = bot
         self.check_ended.start()
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, description=poll_description)
     @has_permissions(administrator=True, manage_guild=True)
     async def poll(self, ctx: commands.Context):
         """
@@ -113,7 +114,7 @@ class Poll(commands.Cog):
         else:
             return True
 
-    @commands.command()
+    @commands.command(description=testpoll_description)
     async def testpoll(self, ctx: commands.Context, time=None):
         """
         A (temporary) testing command,
@@ -169,9 +170,11 @@ class Poll(commands.Cog):
         "Makes sure that the bot is ready before it checks for ended polls"
         await self.bot.wait_until_ready()
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, description=makepoll_description)
     @has_permissions(administrator=True, manage_guild=True)
     async def makepoll(self, ctx, channel, time, title, *, content):
+        """Single command to make polls. Format:
+        <prefix>!makepoll <channel> <time> <title> <content>"""
         time_check = re.match(r'\d', str(time))
         for gw_channel in ctx.guild.channels:
             if str(gw_channel.mention) == str(channel):
