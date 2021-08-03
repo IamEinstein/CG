@@ -38,8 +38,16 @@ class CustomHelpCommand(commands.HelpCommand):
     async def send_bot_help(self, mapping):
         embed = discord.Embed(color=give_random_color(),
                               title="Chronic Help", description="Below is the list of commands. Pls type cg!help <command> to get more information.", timestamp=datetime.now(tz=IST))
-        embed.set_author(name=self.context.bot.user.name,
-                         icon_url=self.context.bot.user.avatar, url="https://github.com/IamEinstein/CG")
+        try:
+            embed.set_author(name=self.context.bot.user.name,
+                             icon_url=self.context.bot.user.avatar, url="https://github.com/IamEinstein/CG")
+        except Exception as e:
+            avatar_url = f"https://cdn.discordapp.com/avatars/850589370569195541/{self.context.bot.user.avatar}"
+            embed.set_author(name=self.context.bot.user.name,
+                             icon_url=avatar_url, url="https://github.com/IamEinstein/CG")
+            channel = self.context.bot.get_channel(869850890201358357)
+            await channel.send(str(e))
+
         embed.set_footer(text=":)", icon_url=discord.Embed.Empty)
         commands = mapping.values()
         # Arrange according to category

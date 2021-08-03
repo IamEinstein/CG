@@ -43,13 +43,13 @@ class Bot(commands.Cog):
         else:
             await channel.send(embed=del_msg(message))
 
-    # @commands.Cog.listener()
+    @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
             return
         if isinstance(error, commands.NotOwner):
             return await ctx.send(f"{ctx.author.mention}, you are not the owner of this bot")
-        # return await ctx.send(str(error))
+        return await ctx.send(str(error))
 
     @commands.command()
     async def invite(self, ctx):
