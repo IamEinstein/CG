@@ -98,3 +98,9 @@ async def log_poll(poll: PollModel, bot: commands.Bot):
     embed.add_field(
         name=f"Winner", value=f"Winner {poll['winner']}, Votes: {reaction_count}")
     return embed
+
+
+def dm_join_embed(channel):
+    embed = discord.Embed(colour=give_random_color(), title=f"Welcome to Chronic Gamers",
+                          description=f"Welcome to Chronic Gamers (CG). We are a lively and friendly community built around zombsroyale, minecraft and other games. Kindly check the rules here, {channel.mention}.", timestamp=datetime.datetime.now(IST))
+    return embed
