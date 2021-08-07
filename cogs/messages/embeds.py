@@ -56,7 +56,7 @@ def edit_msg(before, after):
     embed.add_field(name="Edited Message",
                     value=f'{after.content}', inline=True)
     embed.add_field(
-        name="Channel", value=f"{before.schannel.mention}", inline=True)
+        name="Channel", value=f"{before.channel.mention}", inline=True)
     return embed
 
 
@@ -103,4 +103,10 @@ async def log_poll(poll: PollModel, bot: commands.Bot):
 def dm_join_embed(channel):
     embed = discord.Embed(colour=give_random_color(), title=f"Welcome to Chronic Gamers",
                           description=f"Welcome to Chronic Gamers (CG). We are a lively and friendly community built around zombsroyale, minecraft and other games. Kindly check the rules here, {channel.mention}.", timestamp=datetime.datetime.now(IST))
+    return embed
+
+
+def approved_embed(user):
+    embed = discord.embed(color=give_random_color(), title="Registration successful",
+                          description=f"Hi {user.mention}, we are glad to announce that your registration for the chronic members clan has been approved.")
     return embed
