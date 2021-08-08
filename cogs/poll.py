@@ -174,7 +174,7 @@ class Poll(commands.Cog):
     @has_permissions(administrator=True, manage_guild=True)
     async def makepoll(self, ctx, channel, time, title, *, content):
         """Single command to make polls. Format:
-        <prefix>!makepoll <channel> <time> <title> <content>"""
+        cg!makepoll <channel> <time> <title> <content>"""
         time_check = re.match(r'\d', str(time))
         for gw_channel in ctx.guild.channels:
             if str(gw_channel.mention) == str(channel):

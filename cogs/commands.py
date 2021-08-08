@@ -2,10 +2,11 @@ import itertools
 import asyncio
 from discord.ext import commands
 from mongo import *
-from .messages.embeds import create_team_emded
+from .messages.embeds import create_team_emded, info_embed
 from .messages.dms import *
 from .messages.poll import timeout_message
 from .descriptions import maketeams_description
+import re
 
 
 class CGCommands(commands.Cog):
@@ -58,7 +59,21 @@ class CGCommands(commands.Cog):
                     else:
                         await ctx.send(teams)
                 else:
-                    await ctx.send("NO one reacted :|")
+                    await ctx.send("No one reacted :|")
+
+    @commands.command()
+    async def info(self, ctx: commands.Context, member=None):
+        if member is None:
+            msg = await ctx.author.send(embed=info_embed(ctx))
+
+        elif re.match(r'<@!\d{18}>', member):
+            id = member[3:-1]
+            # author = await self.bot.get_user(id)
+            return await ctx.reply(embed=info_embed(ctx))
+        else:
+            msg = await ctx.author.send(embed=info_embed(ctx))
+        await ctx.message.add_reaction('✅')
+        await ctx.message.reply(msg.jump_url)
 
 
 def setup(bot):

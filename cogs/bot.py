@@ -2,7 +2,7 @@ import discord
 import os
 from discord.ext import commands
 import sys
-from .messages.embeds import ready_embed, edit_msg, del_msg, dm_join_embed
+from .messages.embeds import ready_embed, edit_msg, del_msg, dm_join_embed, leave_embed
 
 
 class Bot(commands.Cog):
@@ -62,7 +62,8 @@ class Bot(commands.Cog):
         if member.guild.id == 850593645009698836:
             return
         channel = self.bot.get_channel(840509242300694559)
-        return await channel.send(f"{member.name} left the server")
+
+        return await channel.send(embed=leave_embed(member))
 
     @commands.command()
     async def invite(self, ctx):

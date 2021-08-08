@@ -1,6 +1,7 @@
 import pymongo
 from dotenv import load_dotenv
 import os
+from discord.ext import commands
 from utils.tz import IST, datetime_from_utc_to_local
 from datetime import datetime
 from umongo import Document, fields
@@ -14,19 +15,19 @@ db = pymongo.MongoClient(os.getenv("DATABASE_URI"))['chronic']
 instance = PyMongoInstance(db)
 collection = db['data']
 polls = db['polls']
+registrations = db['registrations']
 # User model
 
 
 @instance.register
 class ChronicGamer(Document):
     """
-    Model for each user
+    Model for each gamer
     """
-    name = fields.StringField(required=True)
-    discord_id = fields.IntegerField(unique=True)
-    send_dm = fields.BooleanField(default=True)
-    game = fields.ListField(fields.StringField(), default=[])
-    tied = fields.IntegerField(required=True)
+    username = fields.StringField(required=True)
+    discord_id = fields.IntegerField(unique=True, required=True)
+    games = fields.ListField(fields.StringField(), default=[])
+    tier = fields.IntegerField(required=True)
 
     class Meta:
         collection_name = "data"
@@ -93,3 +94,47 @@ class PollModel(Document):
             return ended_list
         else:
             return None
+
+# Registration Model
+
+
+@instance.register
+class RegistrationGamer(Document):
+    class Meta:
+        collection_name = "registrations"
+    tier = fields.IntegerField(required=True)
+    attachment_url = fields.UrlField(required=True)
+    games = fields.ListField(fields.StringField(), default=[])
+    username = fields.StringField(required=True, unique=False)
+    dm_msg_id = fields.IntegerField(required=False)
+    time_registered = fields.DateTimeField(default=datetime.now(tz=IST))
+    discord_id = fields.IntegerField(required=True, unique=True)
+    approved = fields.BooleanField(default=False)
+
+    async def register(self=None, user=None):
+        if self is not None:
+            if self.approved == True:
+                return "User already is registered"
+            gamer = ChronicGamer(username=self.username, tier=self.tier,
+                                 games=self.games, discord_id=self.discord_id)
+            gamer.commit()
+        elif self is None:
+            if user['approved'] == True:
+                return "User already is registered"
+            gamer = ChronicGamer(username=user['username'], tier=user['tier'],
+                                 games=user['games'], discord_id=user['discord_id'])
+            gamer.commit()
+        return gamer
+
+    async def check_approved(self=None, bot: commands.Bot = None):
+        for user in registrations.find({}):
+            admin = bot.get_user(594093066839654418)
+            msg_id = int(user['dm_msg_id'])
+            msg = await admin.fetch_message(msg_id)
+            for reaction in msg.reactions:
+                if reaction.emoji == "✅":
+                    user['approved'] == True
+                    gamer = await self.register(user)
+                    registrations.delete_one({"discord_id": user['id']})
+                    print(f"{user}")
+                    return gamer

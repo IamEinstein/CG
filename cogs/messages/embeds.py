@@ -110,3 +110,27 @@ def approved_embed(user):
     embed = discord.embed(color=give_random_color(), title="Registration successful",
                           description=f"Hi {user.mention}, we are glad to announce that your registration for the chronic members clan has been approved.")
     return embed
+
+
+def info_embed(ctx: commands.Context, author: discord.User = None):
+
+    user = ctx.author
+    id = user.id
+    avatar_url = user.avatar
+    time_created = user.created_at
+    embed = discord.Embed(colour=give_random_color(
+    ), title="User information", timestamp=datetime.datetime.now())
+    embed.add_field(name="id", value=id, inline=False)
+    embed.set_thumbnail(url=avatar_url)
+    embed.add_field(name="Creation Date", value=format_time(
+        time_created), inline=False)
+    embed.add_field(name="Username", value=f"{user.name}#{user.discriminator}")
+    icon = ctx.bot.user.avatar
+    embed.set_footer(text="Chronic Gamers", icon_url=icon)
+    return embed
+
+
+def leave_embed(user: discord.User):
+    embed = discord.Embed(colour=give_random_color(
+    ), title="A Member has left us.", description=f"{user.mention} has left the server")
+    return embed
