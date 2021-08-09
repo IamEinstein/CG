@@ -12,14 +12,17 @@ class Fun(commands.Cog):
     @commands.command(description=meme_description)
     async def meme(self, ctx: commands.Context):
         meme_url = "https://meme-api.herokuapp.com/gimme"
-        response = requests.get(meme_url)
-        print(response.json()['url'])
-        print(response.status_code)
-        json = response.json()
-        if json['nsfw'] == False or json['nsfw'] == "false":
-            embed = discord.Embed(title=json['title'], url=json['postLink'])
-            embed.set_image(url=json['url'])
-            await ctx.message.reply(embed=embed)
+        while True:
+            response = requests.get(meme_url)
+            json = response.json()
+            if json['nsfw'] == False or json['nsfw'] == "false":
+                embed = discord.Embed(
+                    title=json['title'], url=json['postLink'])
+                embed.set_image(url=json['url'])
+                await ctx.message.reply(embed=embed)
+                break
+            else:
+                continue
 
     @commands.command(description=joke_description)
     async def joke(self, ctx: commands.Context):
