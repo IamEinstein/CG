@@ -9,7 +9,7 @@ from utils.colours import give_random_color
 
 def create_team_emded(time: int, game: str):
     embed = Embed(colour=give_random_color(
-    ), description=f"Time to play {game.content},react with  👍 if u in", title="Matchmaking")
+    ), description=f"Time to play {game.content},react with 👍 if u in", title="Matchmaking")
     embed.set_footer(text=f"Ends in {str(time)} seconds")
 
     return embed
