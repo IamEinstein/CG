@@ -15,7 +15,6 @@ load_dotenv()
 token = os.getenv("BOT_TOKEN")
 client = commands.Bot(command_prefix="cg!", activity=discord.Game(
     "Developed by Ash"), intents=discord.Intents.all(), help_command=CustomHelpCommand())
-
 for i in cogs.cogs:
     client.load_extension(f"cogs.{i}")
 
@@ -26,6 +25,7 @@ if sys.platform == "linux":
     print('Waiting for bot to get ready')
     client.run(token)
 else:
+    client.load_extension("jishaku")
     logger = logging.getLogger('discord')
     logger.setLevel(logging.DEBUG)
     handler = logging.FileHandler(

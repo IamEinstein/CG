@@ -48,14 +48,15 @@ class CGCommands(commands.Cog):
                 print(users)
                 if users != None and users != []:
                     teams = list(itertools.permutations(users, 3))
-                    if teams == None:
+                    if teams == None or teams == []:
                         new_teams = list(itertools.permutations(users, 2))
-                        if new_teams == None:
+                        if new_teams == None or teams == []:
                             new_new_teams = teams = list(
                                 itertools.permutations(users, 1))
-                            ctx.send(new_new_teams)
+
+                            await ctx.send(new_new_teams)
                         else:
-                            ctx.send(new_teams)
+                            await ctx.send(new_teams)
                     else:
                         await ctx.send(teams)
                 else:

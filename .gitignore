@@ -136,3 +136,4 @@ test_bot.py
 discord.log
 poetry.lock
 pyproject.toml
+pagination.py
