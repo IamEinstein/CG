@@ -19,7 +19,6 @@ def ready_embed(platform):
     """
     Embed for bot's startup message
     """
-
     embed = discord.Embed(title="Bot has started/restarted",
                           description="Bot has started running, here are the details", color=give_random_color())
     local_timezone = datetime.datetime.now(
