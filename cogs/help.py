@@ -19,7 +19,7 @@ class CustomHelpCommand(commands.HelpCommand):
         embed = discord.Embed(
             color=0xFE9AC9, title=title, description=description)
         embed.set_footer(
-            text=f'Use "cg!help command" for more info on a command.'
+            text='Use "cg!help command" for more info on a command.'
         )
 
     @staticmethod
@@ -54,7 +54,7 @@ class CustomHelpCommand(commands.HelpCommand):
                                     value=f"{command.description}", inline=False)
                 elif command.name != "help" and command.name != "invite":
                     embed.add_field(name=f"{command.name}",
-                                    value=f"No description", inline=True)
+                                    value="No description", inline=True)
 
         await self.context.message.reply(embed=embed)
 
