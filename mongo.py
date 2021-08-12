@@ -35,10 +35,9 @@ class ChronicGamer(Document):
     async def is_registered(self=None, id=None):
         if id is None:
             return "Invalid ID"
-        else:
-            collection = db['data']
-            number = collection.count_documents({"discord_id": id})
-            return number >= 1
+        collection = db['data']
+        number = collection.count_documents({"discord_id": id})
+        return number >= 1
 
 
 
