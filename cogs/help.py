@@ -28,7 +28,6 @@ class CustomHelpCommand(commands.HelpCommand):
             color=0xFE9AC9, title=title, description=description)
         counter = 0
         for cog in cogs:
-            cog = cog
             description = cog.description
             description = f"{description or 'No Description'} \n {''.join([f'`{command.qualified_name}` ' for command in cog.commands])}"
             embed.add_field(name=cog.qualified_name,
