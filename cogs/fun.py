@@ -21,8 +21,7 @@ class Fun(commands.Cog):
                 embed.set_image(url=json['url'])
                 await ctx.message.reply(embed=embed)
                 break
-            else:
-                continue
+            continue
 
     @commands.command(description=joke_description)
     async def joke(self, ctx: commands.Context):

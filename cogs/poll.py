@@ -61,9 +61,8 @@ class Poll(commands.Cog):
                                 gw_channel_name = gw_channel.content[2:-2]
                                 gw_channel_obj = channel
                                 break
-                            else:
-                                gw_channel_name = None
-                                continue
+                            gw_channel_name = None
+                            continue
 
                         if gw_channel_name is not None:
                             await ctx.send(react_message)
@@ -181,9 +180,8 @@ class Poll(commands.Cog):
                 gw_channel_name = channel[2:-2]
                 gw_channel_obj = gw_channel
                 break
-            else:
-                gw_channel_name = None
-                continue
+            gw_channel_name = None
+            continue
         if gw_channel_name and gw_channel_obj and time_check:
             await ctx.send(react_message)
             try:
