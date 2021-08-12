@@ -38,10 +38,7 @@ class ChronicGamer(Document):
         else:
             collection = db['data']
             number = collection.count_documents({"discord_id": id})
-            if number >= 1:
-                return True
-            else:
-                return False
+            return number >= 1
 
 
 async def register(name, id):
