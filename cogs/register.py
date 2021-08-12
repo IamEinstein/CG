@@ -38,7 +38,6 @@ class Register(commands.Cog):
     @tasks.loop(minutes=1)
     async def check_approved(self):
         "Checks for approvals for entering the clan."
-
         gamer = await RegistrationGamer.check_approved(self=None, bot=self.bot)
         if gamer:
             user = self.bot.get_user(user_id=gamer.discord_id)
