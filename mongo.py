@@ -92,8 +92,8 @@ class PollModel(Document):
                 polls.find_and_modify(query={"_id": poll['_id']}, update={
                     '$set': {'ended': True}})
             return ended_list
-        else:
-            return None
+            
+        return None
 
 # Registration Model
 
