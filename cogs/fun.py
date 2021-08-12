@@ -15,7 +15,7 @@ class Fun(commands.Cog):
         while True:
             response = requests.get(meme_url)
             json = response.json()
-            if json['nsfw'] == False or json['nsfw'] == "false":
+            if json['nsfw'] is False or json['nsfw'] == "false":
                 embed = discord.Embed(
                     title=json['title'], url=json['postLink'])
                 embed.set_image(url=json['url'])

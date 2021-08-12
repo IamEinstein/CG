@@ -33,7 +33,7 @@ class ChronicGamer(Document):
         collection_name = "data"
 
     async def is_registered(self=None, id=None):
-        if id == None:
+        if id is None:
             return "Invalid ID"
         else:
             collection = db['data']
@@ -113,13 +113,13 @@ class RegistrationGamer(Document):
 
     async def register(self=None, user=None):
         if self is not None:
-            if self.approved == True:
+            if self.approved is True:
                 return "User already is registered"
             gamer = ChronicGamer(username=self.username, tier=self.tier,
                                  games=self.games, discord_id=self.discord_id)
             gamer.commit()
         elif self is None:
-            if user['approved'] == True:
+            if user['approved'] is True:
                 return "User already is registered"
             gamer = ChronicGamer(username=user['username'], tier=user['tier'],
                                  games=user['games'], discord_id=user['discord_id'])
@@ -133,7 +133,7 @@ class RegistrationGamer(Document):
             msg = await admin.fetch_message(msg_id)
             for reaction in msg.reactions:
                 if reaction.emoji == "✅":
-                    user['approved'] == True
+                    user['approved'] is True
                     gamer = await self.register(user)
                     registrations.delete_one({"discord_id": user['id']})
                     print(f"{user}")

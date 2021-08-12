@@ -23,7 +23,7 @@ class CGCommands(commands.Cog):
             game = await self.bot.wait_for("message", check=lambda message: message.author.id == ctx.author.id, timeout=30)
         except asyncio.TimeoutError:
             return await ctx.send(timeout_message)
-        if game != None:
+        if game is not None:
             await ctx.send("How much time do you want to wait for making the teams (enter in seconds)")
             time = await self.bot.wait_for(
                 "message", timeout=30, check=lambda message: message.author.id == ctx.author.id)
@@ -46,11 +46,11 @@ class CGCommands(commands.Cog):
                         if user.id != 850589370569195541:
                             users.append(user)
                 print(users)
-                if users != None and users != []:
+                if users is not None and users != []:
                     teams = list(itertools.permutations(users, 3))
-                    if teams == None or teams == []:
+                    if teams is None or teams == []:
                         new_teams = list(itertools.permutations(users, 2))
-                        if new_teams == None or teams == []:
+                        if new_teams is None or teams == []:
                             new_new_teams = teams = list(
                                 itertools.permutations(users, 1))
 
