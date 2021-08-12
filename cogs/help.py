@@ -49,7 +49,7 @@ class CustomHelpCommand(commands.HelpCommand):
         for command_list in commands:
 
             for command in command_list:
-                if command.description != None and command.description != "" and command.name != "help" and command.name != "invite":
+                if command.description is not None and command.description != "" and command.name != "help" and command.name != "invite":
                     embed.add_field(name=f"{command.name}",
                                     value=f"{command.description}", inline=False)
                 elif command.name != "help" and command.name != "invite":

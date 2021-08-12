@@ -65,7 +65,7 @@ class Poll(commands.Cog):
                                 gw_channel_name = None
                                 continue
 
-                        if gw_channel_name != None:
+                        if gw_channel_name is not None:
                             await ctx.send(react_message)
                             try:
                                 reactions = await self.bot.wait_for("message", timeout=30, check=lambda msg: msg.author.id == ctx.author.id)
@@ -121,9 +121,9 @@ class Poll(commands.Cog):
         used to test polls
         """
         if ctx.author.id == 764415588873273345:
-            if time == None:
+            if time is None:
                 await self.create_poll(title="Test", content="oof", channel=ctx.channel, reactions=['🤣', '😔', '😈'], time=0.5, time_created=datetime.now(tz=IST))
-            elif time != None:
+            elif time is not None:
                 await self.create_poll(title="Test", content="oof", channel=ctx.channel, reactions=['🤣', '😔', '😈'], time=int(time), time_created=datetime.now(tz=IST))
 
     async def end_poll(self, poll: PollModel):

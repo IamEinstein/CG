@@ -28,7 +28,7 @@ class Bot(commands.Cog):
         if before.guild.id == 850593645009698836:
             return
         channel = self.bot.get_channel(856767714520465459)
-        if int(before.channel.id) == 856767714520465459 or before.author.bot == True or before.content == after.content:
+        if int(before.channel.id) == 856767714520465459 or before.author.bot is True or before.content == after.content:
             pass
         else:
             await channel.send(embed=edit_msg(before, after))
