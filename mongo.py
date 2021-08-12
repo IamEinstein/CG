@@ -35,30 +35,26 @@ class ChronicGamer(Document):
     async def is_registered(self=None, id=None):
         if id is None:
             return "Invalid ID"
-        else:
-            collection = db['data']
-            number = collection.count_documents({"discord_id": id})
-            if number >= 1:
-                return True
-            else:
-                return False
+        collection = db['data']
+        number = collection.count_documents({"discord_id": id})
+        if number >= 1:
+            return True
+        return False
 
 
 async def register(name, id):
     if await ChronicGamer.is_registered(id=id):
         return False
-    else:
-        cg = ChronicGamer(name=name, discord_id=id)
-        ChronicGamer.commit()
-        return True
+    cg = ChronicGamer(name=name, discord_id=id)
+    ChronicGamer.commit()
+    return True
 
 
 async def remove_user(id):
     if await ChronicGamer.is_registered(id=id):
         collection.delete_one({"discord_id": id})
         return True
-    else:
-        return False
+    return False
 
 # Poll Model
 
