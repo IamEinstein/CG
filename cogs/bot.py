@@ -69,8 +69,7 @@ class Bot(commands.Cog):
     async def invite(self, ctx):
         if ctx.author.id == 764415588873273345:
             return await ctx.author.send(os.getenv("BOT_LINK"))
-        else:
-            return await ctx.send("You are not authorised to use this command")
+        return await ctx.send("You are not authorised to use this command")
 
 
 def setup(bot):

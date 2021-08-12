@@ -41,21 +41,20 @@ class ChronicGamer(Document):
             return number >= 1
 
 
+
 async def register(name, id):
     if await ChronicGamer.is_registered(id=id):
         return False
-    else:
-        cg = ChronicGamer(name=name, discord_id=id)
-        ChronicGamer.commit()
-        return True
+    cg = ChronicGamer(name=name, discord_id=id)
+    ChronicGamer.commit()
+    return True
 
 
 async def remove_user(id):
     if await ChronicGamer.is_registered(id=id):
         collection.delete_one({"discord_id": id})
         return True
-    else:
-        return False
+    return False
 
 # Poll Model
 
