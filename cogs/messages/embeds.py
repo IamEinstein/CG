@@ -19,7 +19,6 @@ def ready_embed(platform):
     """
     Embed for bot's startup message
     """
-
     embed = discord.Embed(title="Bot has started/restarted",
                           description="Bot has started running, here are the details", color=give_random_color())
     local_timezone = datetime.datetime.now(
@@ -91,17 +90,17 @@ async def log_poll(poll: PollModel, bot: commands.Bot):
         title=f"Poll ended in {guild_name}", url=url, thumbnail=icon_url, color=give_random_color())
     embed.add_field(name="Poll topic", value=poll['title'])
     embed.add_field(
-        name=f"Started", value=str(time_started))
-    embed.add_field(name=f"Ended", value=str(time_ended))
+        name="Started", value=str(time_started))
+    embed.add_field(name="Ended", value=str(time_ended))
     embed.add_field(name="Ended at",
                     value=f"{str(datetime.datetime.now(tz=IST))}")
     embed.add_field(
-        name=f"Winner", value=f"Winner {poll['winner']}, Votes: {reaction_count}")
+        name="Winner", value=f"Winner {poll['winner']}, Votes: {reaction_count}")
     return embed
 
 
 def dm_join_embed(channel):
-    embed = discord.Embed(colour=give_random_color(), title=f"Welcome to Chronic Gamers",
+    embed = discord.Embed(colour=give_random_color(), title="Welcome to Chronic Gamers",
                           description=f"Welcome to Chronic Gamers (CG). We are a lively and friendly community built around zombsroyale, minecraft and other games. Kindly check the rules here, {channel.mention}.", timestamp=datetime.datetime.now(IST))
     return embed
 

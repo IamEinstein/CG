@@ -33,32 +33,27 @@ class ChronicGamer(Document):
         collection_name = "data"
 
     async def is_registered(self=None, id=None):
-        if id == None:
+        if id is None:
             return "Invalid ID"
-        else:
-            collection = db['data']
-            number = collection.count_documents({"discord_id": id})
-            if number >= 1:
-                return True
-            else:
-                return False
+        collection = db['data']
+        number = collection.count_documents({"discord_id": id})
+        return number >= 1
+
 
 
 async def register(name, id):
     if await ChronicGamer.is_registered(id=id):
         return False
-    else:
-        cg = ChronicGamer(name=name, discord_id=id)
-        ChronicGamer.commit()
-        return True
+    cg = ChronicGamer(name=name, discord_id=id)
+    ChronicGamer.commit()
+    return True
 
 
 async def remove_user(id):
     if await ChronicGamer.is_registered(id=id):
         collection.delete_one({"discord_id": id})
         return True
-    else:
-        return False
+    return False
 
 # Poll Model
 
@@ -92,8 +87,8 @@ class PollModel(Document):
                 polls.find_and_modify(query={"_id": poll['_id']}, update={
                     '$set': {'ended': True}})
             return ended_list
-        else:
-            return None
+            
+        return None
 
 # Registration Model
 
@@ -113,13 +108,13 @@ class RegistrationGamer(Document):
 
     async def register(self=None, user=None):
         if self is not None:
-            if self.approved == True:
+            if self.approved is True:
                 return "User already is registered"
             gamer = ChronicGamer(username=self.username, tier=self.tier,
                                  games=self.games, discord_id=self.discord_id)
             gamer.commit()
         elif self is None:
-            if user['approved'] == True:
+            if user['approved'] is True:
                 return "User already is registered"
             gamer = ChronicGamer(username=user['username'], tier=user['tier'],
                                  games=user['games'], discord_id=user['discord_id'])
@@ -133,7 +128,7 @@ class RegistrationGamer(Document):
             msg = await admin.fetch_message(msg_id)
             for reaction in msg.reactions:
                 if reaction.emoji == "✅":
-                    user['approved'] == True
+                    user['approved'] is True
                     gamer = await self.register(user)
                     registrations.delete_one({"discord_id": user['id']})
                     print(f"{user}")

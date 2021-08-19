@@ -14,19 +14,20 @@ class CustomHelpCommand(commands.HelpCommand):
         if isinstance(error, commands.CommandInvokeError):
             await ctx.send(str(error.original))
 
-    def make_page_embed(self, commands, title="Chronic Help", description=discord.Embed.Empty):
+    @staticmethod
+    def make_page_embed(commands, title="Chronic Help", description=discord.Embed.Empty):
         embed = discord.Embed(
             color=0xFE9AC9, title=title, description=description)
         embed.set_footer(
-            text=f'Use "cg!help command" for more info on a command.'
+            text='Use "cg!help command" for more info on a command.'
         )
 
-    def make_default_embed(self, cogs, title="Categories", description=discord.Embed.Empty):
+    @staticmethod
+    def make_default_embed(cogs, title="Categories", description=discord.Embed.Empty):
         embed = discord.Embed(
             color=0xFE9AC9, title=title, description=description)
         counter = 0
         for cog in cogs:
-            cog = cog
             description = cog.description
             description = f"{description or 'No Description'} \n {''.join([f'`{command.qualified_name}` ' for command in cog.commands])}"
             embed.add_field(name=cog.qualified_name,
@@ -47,12 +48,12 @@ class CustomHelpCommand(commands.HelpCommand):
         for command_list in commands:
 
             for command in command_list:
-                if command.description != None and command.description != "" and command.name != "help" and command.name != "invite":
+                if command.description is not None and command.description != "" and command.name != "help" and command.name != "invite":
                     embed.add_field(name=f"{command.name}",
                                     value=f"{command.description}", inline=False)
                 elif command.name != "help" and command.name != "invite":
                     embed.add_field(name=f"{command.name}",
-                                    value=f"No description", inline=True)
+                                    value="No description", inline=True)
 
         await self.context.message.reply(embed=embed)
 
