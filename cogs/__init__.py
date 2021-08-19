@@ -3,5 +3,6 @@ cogs = (
     "commands",
     "poll",
     'register',
-    'fun'
+    'fun',
+    'pb'
 )
