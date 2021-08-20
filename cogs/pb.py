@@ -40,7 +40,6 @@ class PikaBot(commands.Cog):
         await ctx.send(num1 * num2)
 
     @commands.command()
-    @commands.is_owner()
     async def petpet(self, ctx: commands.Context, *, member: discord.Member = None):
         petpet_url = decrypt_url(encrypted_url=encrypt_petpet, tag=petpet_tag)
         if member == None:
