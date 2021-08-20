@@ -4,8 +4,11 @@ import aiohttp
 import io
 import os
 from dotenv import load_dotenv
+from helpers.encrypt import decrypt_url
 load_dotenv()
 key = os.getenv("API_KEY")
+petpet_tag = b'n\xe2\xba1i\xf8\xcc@\tu\x0eil3Ho'
+encrypt_petpet = b'\xfb\x0e\xc1\x82\xd6\x001h\xa2+\x9d2\xd9\xb3\xa3d\x1fy\x84j\xac\xd7/4\x92lc5\xb0\xf7\xb0CB\xf1\x02I\xef\xea\xbc\x82\xae\xad'
 
 
 class PikaBot(commands.Cog):
@@ -38,14 +41,17 @@ class PikaBot(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def petpet(self, ctx, *, member: discord.Member = None):
+    async def petpet(self, ctx: commands.Context, *, member: discord.Member = None):
+        petpet_url = decrypt_url(encrypted_url=encrypt_petpet, tag=petpet_tag)
         if member == None:
             member = ctx.author
 
         await ctx.trigger_typing()
         async with aiohttp.ClientSession() as session:
+            print(petpet_url[2:-2])
+            u = petpet_url[2:-2]
             async with session.get(
-                    f"huh, what u tryna see aye aye ?"
+                    f"{u}?username={member.name}&avatar={member.avatar}&key={key}"
             ) as resp:
 
                 if 300 > resp.status >= 200:
@@ -60,66 +66,6 @@ class PikaBot(commands.Cog):
     @commands.command()
     async def avatar(ctx, *, member: discord.Member = None):
         await ctx.send(member.avatar_url)
-
-    '''@commands.command()
-    async def stupid(ctx, *, member: discord.Member = None):
-        if member == None:
-            member = ctx.author
-
-        await ctx.trigger_typing()
-        async with aiohttp.ClientSession() as session:
-            async with session.get(
-                    f""
-            ) as resp:
-
-                if 300 > resp.status >= 200:
-                    fp = io.BytesIO(await resp.read())
-
-                    await ctx.reply(file=discord.File(fp, 'stupid.gif'))
-                else:
-                    await ctx.reply('Couldnt get image :(')
-
-                await session.close()'''
-
-    '''def get_birb():
-        #making a GET request to the endpoint.
-        resp = requests.get("animal/birb")
-        #checking if resp has a healthy status code.
-        if 300 > resp.status_code >= 200:
-            content = resp.json() #We have a dict now.
-        else:
-            content = f"Recieved a bad status code of {resp.status_code}."
-        #print(content)
-    get_birb()'''
-
-    '''@client.event
-    async def on_message(message):
-    if message.author == client.user:
-    return
-
-    if message.content.startswith('pb birb'):
-        birb = get_birb()
-        await message.channel.send(birb)'''
-
-    '''@client.command()
-    async def pikachu(ctx, *, member: discord.Member = None):
-        if member == None:
-            member = ctx.author
-
-        await ctx.trigger_typing()
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"pokedex?pokemon=pikachu"
-            )
-            as resp: 
-
-                if 300 > resp.status >= 200:
-                    fp = io.BytesIO(await resp.read())
-
-                    await ctx.reply(file=discord.File(fp, 'stupid.gif'))
-                else:
-                    await ctx.reply('Couldnt get image :(')
-
-                await session.close()'''
 
     # Kick Command
 
