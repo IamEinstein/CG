@@ -47,7 +47,6 @@ class PikaBot(commands.Cog):
 
         await ctx.trigger_typing()
         async with aiohttp.ClientSession() as session:
-            print(petpet_url[2:-2])
             u = petpet_url[2:-2]
             async with session.get(
                     f"{u}?username={member.name}&avatar={member.avatar}&key={key}"
