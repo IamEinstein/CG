@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
 import aiohttp
+import sys
 import io
 import os
 from dotenv import load_dotenv
@@ -48,18 +49,33 @@ class PikaBot(commands.Cog):
         await ctx.trigger_typing()
         async with aiohttp.ClientSession() as session:
             u = petpet_url[2:-2]
-            async with session.get(
-                    f"{u}?username={member.name}&avatar={member.avatar}&key={key}"
-            ) as resp:
+            if sys.platform != "linux":
+                async with session.get(
+                        f"{u}?username={member.name}&avatar={member.avatar}&key={key}"
+                ) as resp:
 
-                if 300 > resp.status >= 200:
-                    fp = io.BytesIO(await resp.read())
+                    if 300 > resp.status >= 200:
+                        fp = io.BytesIO(await resp.read())
 
-                    await ctx.reply(file=discord.File(fp, 'petpet.gif'))
-                else:
-                    await ctx.reply('Couldnt get image :(')
+                        await ctx.reply(file=discord.File(fp, 'petpet.gif'))
+                    else:
+                        await ctx.reply('Couldnt get image :(')
 
-                await session.close()
+                    await session.close()
+            else:
+                avatar_url = f"https://cdn.discordapp.com/{ctx.author.id}/{ctx.author.avatar}"
+                async with session.get(
+                        f"{u}?username={member.name}&avatar={avatar_url}&key={key}"
+                ) as resp:
+
+                    if 300 > resp.status >= 200:
+                        fp = io.BytesIO(await resp.read())
+
+                        await ctx.reply(file=discord.File(fp, 'petpet.gif'))
+                    else:
+                        await ctx.reply('Couldnt get image :(')
+
+                    await session.close()
 
     @commands.command()
     async def avatar(ctx, *, member: discord.Member = None):

@@ -25,23 +25,28 @@ class Bot(commands.Cog):
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
         "Identifies and reports edited messages"
-        if before.guild.id == 850593645009698836:
-            return
-        channel = self.bot.get_channel(856767714520465459)
-        if int(before.channel.id) == 856767714520465459 or before.author.bot is True or before.content == after.content:
-            pass
+        if before.guild.id == 804047321276743680:
+
+            channel = self.bot.get_channel(856767714520465459)
+            if int(before.channel.id) == 856767714520465459 or before.author.bot is True or before.content == after.content:
+                pass
+            else:
+
+                await channel.send(embed=edit_msg(before, after))
         else:
-            await channel.send(embed=edit_msg(before, after))
+            return
 
     @commands.Cog.listener()
     async def on_message_delete(self, message):
-        if message.guild.id == 850593645009698836:
-            return
-        channel = self.bot.get_channel(856767714520465459)
-        if int(message.channel.id) == 856767714520465459:
-            pass
+
+        if message.guild.id == 804047321276743680:
+            channel = self.bot.get_channel(856767714520465459)
+            if int(message.channel.id) == 856767714520465459:
+                pass
+            else:
+                await channel.send(embed=del_msg(message))
         else:
-            await channel.send(embed=del_msg(message))
+            return
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
