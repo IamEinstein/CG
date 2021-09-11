@@ -3,6 +3,7 @@ from discord.ext import commands, tasks
 from .descriptions import register_description
 from .messages.embeds import approved_embed
 from mongo import RegistrationGamer
+from ..bot import ClusterBot
 
 
 class Register(commands.Cog):
@@ -11,7 +12,7 @@ class Register(commands.Cog):
     Registers users as a clan member
     """
 
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: ClusterBot):
         self.bot = bot
         self.check_approved.start()
 
@@ -51,5 +52,5 @@ class Register(commands.Cog):
         await self.bot.wait_until_ready()
 
 
-def setup(bot: commands.Bot):
+def setup(bot: ClusterBot):
     bot.add_cog(Register(bot))

@@ -1,8 +1,13 @@
+
 import discord
 import os
 from discord.ext import commands
+import time
 import sys
 from .messages.embeds import ready_embed, edit_msg, del_msg, dm_join_embed, leave_embed
+from dotenv import load_dotenv
+from ..bot import ClusterBot
+# from discord import Webhook, AsyncWebhookAdapter
 
 
 class Bot(commands.Cog):
@@ -10,41 +15,43 @@ class Bot(commands.Cog):
     Basic bot setup
     """
 
-    def __init__(self, bot: commands.Bot):
+    async def __init__(self, bot: ClusterBot):
         self.bot = bot
 
     @commands.Cog.listener()
     async def on_ready(self):
         "Tells when the bot is ready"
-        print("Bot is ready")
         channel = self.bot.get_channel(869494380770230282)
         other_channel = self.bot.get_channel(869132416130891796)
         await channel.send(embed=ready_embed(sys.platform))
         await other_channel.send(embed=ready_embed(sys.platform))
+        load_dotenv()
+        # async with aiohttp.ClientSession() as session:
+        #     self.log_hook = Webhook.from_url(
+        #         os.getenv("LOG_WEBHOOK"), adapter=AsyncWebhookAdapter(session))
+        #     self.purge_hook = Webhook.from_url(
+        #         os.getenv("PURGE_HOOK"), adapter=AsyncWebhookAdapter(session))
+        print("Bot is ready")
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
-        "Identifies and reports edited messages"
+        "Logs edited messages"
         if before.guild.id == 804047321276743680:
-
-            channel = self.bot.get_channel(856767714520465459)
             if int(before.channel.id) == 856767714520465459 or before.author.bot is True or before.content == after.content:
                 pass
             else:
-
-                await channel.send(embed=edit_msg(before, after))
+                self.log_hook.send(embed=edit_msg(before, after))
         else:
             return
 
     @commands.Cog.listener()
     async def on_message_delete(self, message):
-
+        "Logs deleted messages "
         if message.guild.id == 804047321276743680:
-            channel = self.bot.get_channel(856767714520465459)
             if int(message.channel.id) == 856767714520465459:
                 pass
             else:
-                await channel.send(embed=del_msg(message))
+                self.log_hook.send(embed=del_msg(message))
         else:
             return
 
@@ -70,6 +77,13 @@ class Bot(commands.Cog):
 
         return await channel.send(embed=leave_embed(member))
 
+    @commands.Cog.listener()
+    async def on_bulk_message_delete(self, messages):
+
+        for message in messages:
+            self.purge_hook.send(del_msg(message))
+            time.sleep(0.3)
+
     @commands.command()
     async def invite(self, ctx):
         if ctx.author.id == 764415588873273345:
@@ -77,5 +91,5 @@ class Bot(commands.Cog):
         return await ctx.send("You are not authorised to use this command")
 
 
-def setup(bot):
+def setup(bot: ClusterBot):
     bot.add_cog(Bot(bot))

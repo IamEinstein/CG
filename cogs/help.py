@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from utils.colours import give_random_color
 from utils.tz import IST
+from ..bot import ClusterBot
 
 
 class CustomHelpCommand(commands.HelpCommand):
@@ -110,10 +111,10 @@ class CustomHelpCommand(commands.HelpCommand):
         await self.context.send(embed=embed)
 
 
-def setup(bot):
+def setup(bot: ClusterBot):
     bot.old_help_command = bot.help_command
     bot.help_command = CustomHelpCommand()
 
 
-def teardown(bot):
+def teardown(bot: ClusterBot):
     bot.help_command = bot.old_help_command

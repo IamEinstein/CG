@@ -3,6 +3,7 @@ import discord
 import aiohttp
 import sys
 import io
+from ..bot import ClusterBot
 import os
 from dotenv import load_dotenv
 from helpers.encrypt import decrypt_url
@@ -17,7 +18,7 @@ class PikaBot(commands.Cog):
     Thanks @PichuPikaRai for this code
     """
 
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: ClusterBot):
         self.bot = bot
 
     @commands.command()
@@ -110,5 +111,5 @@ class PikaBot(commands.Cog):
             await ctx.send("You don't have the permission to ban people")
 
 
-def setup(bot: commands.Bot):
+def setup(bot: ClusterBot):
     bot.add_cog(PikaBot(bot))

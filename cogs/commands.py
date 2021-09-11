@@ -3,14 +3,14 @@ import asyncio
 from discord.ext import commands
 from mongo import *
 from .messages.embeds import create_team_emded, info_embed
-from .messages.dms import *
 from .messages.poll import timeout_message
 from .descriptions import maketeams_description
 import re
+from ..bot import ClusterBot
 
 
 class CGCommands(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: ClusterBot):
         self.bot = bot
 
     @commands.command(aliases=["mt"], description=maketeams_description)
@@ -77,5 +77,5 @@ class CGCommands(commands.Cog):
         await ctx.message.reply(msg.jump_url)
 
 
-def setup(bot):
+def setup(bot: ClusterBot):
     bot.add_cog(CGCommands(bot))

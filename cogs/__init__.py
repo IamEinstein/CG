@@ -4,5 +4,5 @@ cogs = (
     "poll",
     'register',
     'fun',
-    'pb'
+    'pb',
 )

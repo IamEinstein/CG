@@ -59,7 +59,7 @@ def edit_msg(before, after):
     return embed
 
 
-def del_msg(message):
+def del_msg(message:discord.Message):
     """
     Embed for deleted message reporting
     """
@@ -131,5 +131,5 @@ def info_embed(ctx: commands.Context, author: discord.User = None):
 
 def leave_embed(user: discord.User):
     embed = discord.Embed(colour=give_random_color(
-    ), title="A Member has left us.", description=f"{user.mention} has left the server")
+    ), title="A Member has left us.", description=f"{user.name + user.discriminator} has left the server")
     return embed

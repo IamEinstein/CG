@@ -1,4 +1,5 @@
 import asyncio
+from ..bot import ClusterBot
 from discord.ext import commands, tasks
 from discord.ext.commands import has_permissions
 import re
@@ -18,7 +19,7 @@ class Poll(commands.Cog):
     Everything related to polls goes here
     """
 
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: ClusterBot):
         self.bot = bot
         self.check_ended.start()
 
@@ -193,5 +194,5 @@ class Poll(commands.Cog):
                 await self.create_poll(title=title, content=content, channel=gw_channel_obj, reactions=reaction_list, time=int(time), time_created=datetime.now(tz=IST))
 
 
-def setup(bot):
+def setup(bot: ClusterBot):
     bot.add_cog(Poll(bot))

@@ -1,12 +1,13 @@
 from discord.ext import commands
 import requests
 import discord
+from ..bot import ClusterBot
 from .descriptions import joke_description, meme_description
 from utils.colours import give_random_color
 
 
 class Fun(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: ClusterBot):
         self.bot = bot
 
     @commands.command(description=meme_description)
@@ -35,5 +36,5 @@ class Fun(commands.Cog):
         await ctx.message.reply(embed=embed)
 
 
-def setup(bot: commands.Bot):
+def setup(bot: ClusterBot):
     bot.add_cog(Fun(bot))
